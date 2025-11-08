@@ -1,0 +1,103 @@
+# Climate Control System Configuration
+
+# Sensor Configuration
+sensor:
+  i2c_address: 0x44  # SHT35-DIS-B I2C address (0x44 or 0x45)
+  i2c_bus: 1  # I2C bus number
+  read_interval: 2.0  # Seconds between sensor readings
+  
+# Target Environmental Conditions
+# Optimized for Mango Storage: 50-54°F (10-12.2°C), 85-90% RH
+targets:
+  # Temperature settings (Celsius)
+  # 50°F = 10°C, 54°F = 12.2°C
+  temp_min: 10.0
+  temp_target: 11.0
+  temp_max: 12.2
+  
+  # Humidity settings (%)
+  # Optimal range: 85-90%
+  humidity_min: 85.0
+  humidity_target: 87.5
+  humidity_max: 90.0
+  
+  # Rate of change thresholds for predictive control
+  temp_rate_warning: 0.5  # °C per minute
+  humidity_rate_warning: 2.0  # % per minute
+
+# GPIO Pin Assignments
+gpio:
+  water_pump: 17
+  chiller: 27
+  dehumidifier: 22
+  water_level_sensor: 23  # Input pin for low water level indicator
+  
+# Actuator Control Parameters
+actuators:
+  # Minimum time between state changes (seconds) to prevent relay wear
+  min_cycle_time: 10
+  
+  # Maximum continuous run time (seconds) for safety
+  max_pump_runtime: 600  # 10 minutes
+  max_chiller_runtime: 1800  # 30 minutes
+  max_dehumidifier_runtime: 1200  # 20 minutes
+  
+  # Cooling spray duration (seconds)
+  spray_duration: 5
+  spray_cooldown: 30  # Minimum time between spray cycles
+
+# Control Logic Parameters
+control:
+  # Hysteresis to prevent oscillation
+  temp_hysteresis: 0.5  # °C
+  humidity_hysteresis: 2.0  # %
+  
+  # Predictive control window (minutes)
+  prediction_window: 5
+  history_samples: 20  # Number of readings to keep for trend analysis
+  
+  # Control priorities (0-10, higher = more important)
+  priority_temperature: 10
+  priority_humidity: 7
+  priority_energy: 3
+
+# Data Logging
+logging:
+  database_path: "climate_data.db"
+  log_interval: 5  # Seconds between log entries
+  csv_export_dir: "exports"
+  max_db_size_mb: 100  # Auto-cleanup when exceeded
+
+# Dashboard Settings
+dashboard:
+  enabled: true
+  host: "0.0.0.0"  # Listen on all interfaces
+  port: 5000
+  refresh_interval: 2  # Seconds between auto-refresh
+  chart_history_hours: 24  # Hours of data to show in charts
+
+# Safety Settings
+safety:
+  enable_water_level_check: true
+  emergency_shutdown_temp: 15.0  # °C - shutdown if exceeded
+  sensor_timeout: 30  # Seconds - fallback if sensor unresponsive
+  enable_manual_override: true
+
+# Produce Type Presets (can be selected via dashboard)
+presets:
+  mango:
+    temp_target: 11.0
+    humidity_target: 87.5
+    description: "Mango optimal storage: 50-54°F (10-12.2°C), 85-90% RH"
+  leafy_greens:
+    temp_target: 4.0
+    humidity_target: 95.0
+  berries:
+    temp_target: 2.0
+    humidity_target: 90.0
+  tomatoes:
+    temp_target: 13.0
+    humidity_target: 85.0
+  citrus:
+    temp_target: 8.0
+    humidity_target: 85.0

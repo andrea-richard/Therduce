@@ -1,0 +1,26 @@
+# Requirements for Mac Development
+# Note: RPi.GPIO is excluded (Linux-only, not needed for simulation mode)
+
+# Hardware Interface (simulated on Mac)
+smbus2==0.4.3          # I2C communication (simulated when not available)
+
+# Web Dashboard
+Flask==3.0.0
+Flask-SocketIO==5.3.5
+python-socketio==5.10.0
+
+# Data Visualization
+plotly==5.18.0
+pandas==2.1.4
+
+# Configuration
+PyYAML==6.0.1
+
+# Utilities
+python-dateutil==2.8.2
+
+# Note: RPi.GPIO is NOT included here because:
+# - It's Linux-only (won't install on Mac)
+# - The code handles its absence gracefully (simulation mode)
+# - On Raspberry Pi, install the full requirements.txt instead
+
