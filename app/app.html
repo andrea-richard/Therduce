@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climetrics App Mockup</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #cce5ff, #f8f9fa);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .app {
+      background: white;
+      padding: 30px 40px;
+      /* extra bottom padding so content doesn't overlap the pinned status bar */
+      padding-bottom: 90px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 380px;
+      position: relative;
+    }
+
+    .top-bar {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      justify-content: space-between;
+      width: calc(100% - 20px);
+      align-items: center;
+    }
+
+    .language-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 8px;
+      font-size: 0.8em;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .language-btn:hover {
+      background: #0056b3;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #004085;
+    }
+
+    .slider-group, .select-group {
+      margin: 20px 0;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      appearance: none;
+      height: 8px;
+      background: #d3d3d3;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #007bff;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      background: #0056b3;
+    }
+
+    select, button {
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      color: #333;
+    }
+
+    .select-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 5px;
+    }
+
+    .select-row select {
+      flex-grow: 1;
+      padding: 10px;
+    }
+
+    .add-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      width: 35px;
+      height: 35px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background: #0056b3;
+    }
+
+    .value-display {
+      margin-top: 5px;
+      font-size: 1.1em;
+      color: #555;
+    }
+
+    .results {
+      margin-top: 30px;
+      padding: 10px;
+      background: #e9f7ef;
+      border-radius: 10px;
+      font-weight: 500;
+      color: #155724;
+    }
+
+    .primary-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+    }
+
+    .primary-btn:hover {
+      background: #0056b3;
+    }
+
+    .company-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+
+    .status-bar {
+      /* pinned to bottom of the card */
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 16px;
+      padding: 8px 12px;
+      background: linear-gradient(90deg, #ffffffcc, #f1f7ff);
+      border-radius: 10px;
+      font-weight: 600;
+      color: #003366;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="top-bar">
+      <button class="language-btn" id="changeLangBtn">🌐</button>
+    </div>
+
+    <!-- Current sensor readouts (populated from backend) -->
+    <div class="status-bar" id="currentReadings">Current: -- °C | -- % RH</div>
+
+    <img src="logo.png" alt="Company Logo" class="company-logo">
+    <h1>Climetrics</h1>
+
+    <div class="select-group">
+      <label for="produceSelect">Select Produce</label>
+      <div class="select-row">
+        <select id="produceSelect">
+          <option value="mango">Mango</option>
+          <option value="bananas">Banana</option>
+          <option value="avocados">Avocado</option>
+          <option value="papayas">Papaya</option>
+          <option value="tomatoes">Tomato</option>
+        </select>
+        <button class="add-btn" id="addProduceBtn">+</button>
+      </div>
+    </div>
+
+    <div class="slider-group">
+      <label for="tempRange">Preferred Temperature (°C)</label>
+      <input type="range" id="tempRange" min="10" max="35" value="22">
+      <div class="value-display">Temperature: <span id="tempValue">22</span>°C</div>
+    </div>
+
+    <div class="slider-group">
+      <label for="humidityRange">Preferred Humidity (%)</label>
+      <input type="range" id="humidityRange" min="20" max="100" value="50">
+      <div class="value-display">Humidity: <span id="humidityValue">50</span>%</div>
+    </div>
+
+    <div class="slider-group">
+      <label for="toleranceRange">Tolerance Level for Humidity</label>
+      <input type="range" id="toleranceRange" min="0" max="10" value="5">
+      <div class="value-display">Tolerance: ±<span id="toleranceValue">5</span></div>
+    </div>
+
+    <button class="primary-btn" id="saveBtn">Save Settings</button>
+
+    <div class="results" id="resultsBox">
+      Ideal Climate: 22°C ±5 | 50% humidity for Apple
+    </div>
+  </div>
+
+  <script>
+    const tempRange = document.getElementById('tempRange');
+    const humidityRange = document.getElementById('humidityRange');
+    const toleranceRange = document.getElementById('toleranceRange');
+    const produceSelect = document.getElementById('produceSelect');
+    const saveBtn = document.getElementById('saveBtn');
+    const addProduceBtn = document.getElementById('addProduceBtn');
+    const changeLangBtn = document.getElementById('changeLangBtn');
+    
+
+    const tempValue = document.getElementById('tempValue');
+    const humidityValue = document.getElementById('humidityValue');
+    const toleranceValue = document.getElementById('toleranceValue');
+    const resultsBox = document.getElementById('resultsBox');
+  // currentReadings element is used to show live readouts from the backend
+  const currentReadings = document.getElementById('currentReadings');
+
+    function updateValues() {
+      const temp = tempRange.value;
+      const humidity = humidityRange.value;
+      const tol = toleranceRange.value;
+      const produce = produceSelect.value;
+      tempValue.textContent = temp;
+      humidityValue.textContent = humidity;
+      toleranceValue.textContent = tol;
+      resultsBox.textContent = `Ideal Climate: ${temp}°C ±${tol} | ${humidity}% humidity for ${produce.charAt(0).toUpperCase() + produce.slice(1)}`;
+    }
+
+    async function saveSettings() {
+      const settings = {
+        produce: produceSelect.value,
+        temperature: parseFloat(tempRange.value),
+        humidity: parseFloat(humidityRange.value),
+        tolerance: parseFloat(toleranceRange.value)
+      };
+
+      try {
+        const resp = await fetch('/update_settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(settings)
+        });
+
+        const data = await resp.json();
+        if (resp.ok && data.status === 'success') {
+          // Refresh current readings (and targets) immediately
+          await updateCurrentReadings();
+          // Small user confirmation
+          alert('Settings saved and applied.');
+        } else {
+          alert('Failed to save settings: ' + (data.message || resp.statusText));
+        }
+      } catch (err) {
+        alert('Error saving settings: ' + err.message);
+      }
+    }
+
+    function addProduce() {
+      const newProduce = prompt('Enter new produce name:');
+      if (newProduce) {
+        const option = document.createElement('option');
+        option.value = newProduce.toLowerCase();
+        option.textContent = newProduce.charAt(0).toUpperCase() + newProduce.slice(1);
+        produceSelect.appendChild(option);
+        produceSelect.value = option.value;
+        updateValues();
+      }
+    }
+
+    function changeLanguage() {
+      alert('Language selector clicked — would open a small language picker in the final app.');
+    }
+
+    tempRange.addEventListener('input', updateValues);
+    humidityRange.addEventListener('input', updateValues);
+    toleranceRange.addEventListener('input', updateValues);
+    produceSelect.addEventListener('change', updateValues);
+    saveBtn.addEventListener('click', saveSettings);
+    addProduceBtn.addEventListener('click', addProduce);
+    changeLangBtn.addEventListener('click', changeLanguage);
+
+    async function updateCurrentReadings() {
+      try {
+        const resp = await fetch('/current_readings');
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (data && data.status === 'success') {
+          const t = (data.temperature === null) ? '--' : data.temperature.toFixed(1);
+          const h = (data.humidity === null) ? '--' : data.humidity.toFixed(1);
+          const tgtT = data.targets && data.targets.temperature !== undefined ? data.targets.temperature.toFixed(1) : '--';
+          const tgtH = data.targets && data.targets.humidity !== undefined ? data.targets.humidity.toFixed(1) : '--';
+          currentReadings.textContent = `Current: ${t} °C | ${h} % RH  ·  Target: ${tgtT} °C | ${tgtH} %`;
+        }
+      } catch (err) {
+        // fail silently (useful when file is opened directly instead of served)
+      }
+    }
+
+    // Update readings every 5 seconds and once on load
+    updateCurrentReadings();
+    setInterval(updateCurrentReadings, 5000);
+  </script>
+</body>
+</html>

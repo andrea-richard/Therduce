@@ -8,6 +8,8 @@ Includes error handling, calibration support, and data validation.
 import time
 import logging
 from typing import Tuple, Optional
+# import app # from local 
+
 try:
     from smbus2 import SMBus
 except ImportError:
@@ -149,10 +151,11 @@ class SHT35Sensor:
         Returns:
             Relative humidity in %
         """
-        humidity = 100 * raw / 65535.0
-        # Clamp to valid range
-        humidity = max(0.0, min(100.0, humidity + self.humidity_offset))
-        return humidity
+        # humidity = 100 * raw / 65535.0
+        # # Clamp to valid range
+        # humidity = max(0.0, min(100.0, humidity + self.humidity_offset))
+        # return humidity
+        return app.humidity
     
     def _validate_reading(self, temp: float, humidity: float) -> bool:
         """
